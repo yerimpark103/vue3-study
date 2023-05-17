@@ -1,3 +1,7 @@
+import axios from 'axios';
+
+const baseUrl = 'http://localhost:3000';
+
 const posts = [
   { id: 1, title: '제목1', contents: '내용1', createdAt: '2020-01-02' },
   { id: 2, title: '제목2', contents: '내용2', createdAt: '2020-02-02' },
@@ -12,9 +16,19 @@ const posts = [
 ];
 
 export const getPosts = () => {
-  return posts;
+  return axios.get(`${baseUrl}/posts`);
 };
 
 export const getPostById = id => {
-  return posts.find(el => el.id === id);
+  return axios.get(`${baseUrl}/posts/${id}`);
+};
+
+export const createPost = data => {
+  return axios.post(`${baseUrl}/posts`, data);
+};
+export const updatePost = (id, data) => {
+  return axios.put(`${baseUrl}/posts/${id}`, data);
+};
+export const deletePost = id => {
+  return axios.delete(`${baseUrl}/posts/${id}`);
 };
