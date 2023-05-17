@@ -1,23 +1,21 @@
-import axios from 'axios';
-
-const baseUrl = 'http://localhost:3000';
+import { posts } from '.';
 
 export const getPosts = params => {
-  return axios.get(`${baseUrl}/posts`, { params });
+  return posts.get('', { params });
 };
 
 export const getPostById = id => {
-  return axios.get(`${baseUrl}/posts/${id}`);
+  return posts.get(id);
 };
 
 export const createPost = data => {
-  return axios.post(`${baseUrl}/posts`, data);
+  return posts.post('', data);
 };
 
 export const updatePost = (id, data) => {
-  return axios.put(`${baseUrl}/posts/${id}`, data);
+  return posts.put(id, data);
 };
 
 export const deletePost = id => {
-  return axios.delete(`${baseUrl}/posts/${id}`);
+  return posts.delete(id);
 };
