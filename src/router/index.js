@@ -1,4 +1,8 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import {
+  createRouter,
+  createWebHashHistory,
+  createWebHistory,
+} from 'vue-router';
 import HomeView from '@/views/HomeView.vue';
 import AboutView from '@/views/AboutView.vue';
 import PostCreateView from '@/views/posts/PostCreateView.vue';
@@ -36,6 +40,10 @@ const routes = [
     path: '/posts/:id',
     name: 'PostDetail',
     component: PostDetailView,
+    // props: true,
+    props: route => ({
+      id: parseInt(route.params.id),
+    }),
   },
   {
     path: '/posts/:id/edit',
@@ -69,7 +77,12 @@ const routes = [
 ];
 
 const router = createRouter({
+  /** hashHistory : # 가 붙음 (i.e./posts#/)
+   * hash 모드를 사용하면 localhost 전체 파일이 로딩됨. SEO가 불편함.
+   * history 모드로 배포를 할 때는 각각의 라우트가 로딩되어 절대경로로 들어갈 수 없으므로 별도의 설정을 해야 함
+   */
   history: createWebHistory('/'),
+  // history: createWebHashHistory(),
   routes,
 });
 

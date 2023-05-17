@@ -14,3 +14,7 @@ const posts = [
 export const getPosts = () => {
   return posts;
 };
+
+export const getPostById = id => {
+  return posts.find(el => el.id === id);
+};
