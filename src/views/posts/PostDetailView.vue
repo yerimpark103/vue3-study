@@ -55,7 +55,6 @@ const post = ref({
 const fetchPost = async () => {
   try {
     const { data } = await getPostById(props.id);
-    console.log(data);
     setPost(data);
     /** ref 로 선언하면 반응형 객체할당이 됨
      * 장점 : primitive/reference type 에 일관성 가능
