@@ -47,7 +47,7 @@
               type="button"
               @click="handleGoToPage"
             >
-              Add post
+              포스트 작성하기
             </button>
           </div>
         </div>
