@@ -67,7 +67,7 @@ const handleClickEditPost = async () => {
     router.push({ name: 'PostDetail', params: { id } });
     vAlert('수정이 완료되었습니다.', 'success');
   } catch (error) {
-    vAlert('수정에 실패했습니다.');
+    vAlert(error.message);
   }
 };
 

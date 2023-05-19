@@ -15,6 +15,7 @@
           :contents="item.contents"
           :createdAt="item.createdAt"
           @click="handleGoToDetailPage(item.id)"
+          @modal="handleOpenModal(item)"
         ></PostItem>
       </template>
     </AppGrid>
@@ -24,6 +25,15 @@
       :page-count="pageCount"
       @updatePage="page => (params._page = page)"
     />
+
+    <Teleport to="#modal">
+      <PostModal
+        v-model="show"
+        :title="modalTitle"
+        :contents="modalContents"
+        :created-at="modalCreatedAt"
+      />
+    </Teleport>
 
     <template v-if="posts && posts.length > 0">
       <hr class="my-4" />
@@ -38,6 +48,7 @@
 import PostItem from '@/components/posts/PostItem.vue';
 import PostDetailView from '@/views/posts/PostDetailView.vue';
 import PostFilter from '@/views/posts/PostFilter.vue';
+import PostModal from '@/components/posts/PostModal.vue';
 import AppCard from '@/components/AppCard.vue';
 import AppPagination from '@/components/AppPagination.vue';
 import AppGrid from '@/components/AppGrid.vue';
@@ -83,6 +94,18 @@ const handleGoToDetailPage = id => {
     name: 'PostDetail',
     params: { id },
   });
+};
+
+const show = ref(false);
+const modalTitle = ref('');
+const modalContents = ref('');
+const modalCreatedAt = ref('');
+
+const handleOpenModal = ({ title, contents, createdAt }) => {
+  show.value = true;
+  modalTitle.value = title;
+  modalContents.value = contents;
+  modalCreatedAt.value = createdAt;
 };
 </script>
 
