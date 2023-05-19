@@ -1,10 +1,4 @@
 <template>
-  <!-- <Transition name="slide">
-    <div v-if="show" class="app-alert alert" :class="typeStyle" role="alert">
-      {{ message }}
-    </div>
-  </Transition> -->
-
   <div class="app-alert">
     <TransitionGroup name="slide">
       <div
@@ -21,28 +15,6 @@
 </template>
 
 <script setup>
-// import { computed } from 'vue';
-
-// const props = defineProps({
-//   show: {
-//     type: Boolean,
-//     default: false,
-//   },
-//   message: {
-//     type: String,
-//     required: true,
-//   },
-//   type: {
-//     type: String,
-//     default: '',
-//     validator: value => ['success', 'error'].includes(value),
-//   },
-// });
-// const typeStyle = computed(() =>
-//   props.type === 'error' ? 'alert-danger' : 'alert-success',
-// );
-//
-
 defineProps({ items: Array });
 const typeStyle = type => (type === 'error' ? 'alert-danger' : 'alert-success');
 </script>
