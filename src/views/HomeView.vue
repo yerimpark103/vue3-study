@@ -7,8 +7,8 @@
       <AppCard>{{ item }}</AppCard>
     </AppGrid>
     <hr class="my-4" />
-    <h2>{{ $person.name }}</h2>
-    <button class="btn btn-primary" @click="person.say">click person</button>
+    <!-- <h2>{{ $person.name }}</h2> -->
+    <!-- <button class="btn btn-primary" @click="person.say">click person</button> -->
   </div>
 </template>
 
@@ -23,13 +23,11 @@ export default {
 
 <script setup>
 import { inject, ref } from 'vue';
-import AppCard from '@/components/AppCard.vue';
-import AppGrid from '@/components/AppGrid.vue';
 
 const items = ref(['사과', '딸기', '포도', '바나나']);
 
-const person = inject('person');
-console.log('injected person name', person.name);
+// const person = inject('person');
+// console.log('injected person name', person.name);
 </script>
 
 <style lang="scss" scoped></style>
