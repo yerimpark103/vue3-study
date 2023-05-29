@@ -59,15 +59,13 @@ import PostModal from '@/components/posts/PostModal.vue';
 import AppLoading from '@/components/app/AppLoading.vue';
 import AppError from '@/components/app/AppError.vue';
 import { getPosts } from '@/api/posts';
-import { ref, watchEffect } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { computed } from '@vue/reactivity';
+import { useAxios } from '@/hooks/useAxios';
 
 const router = useRouter();
 
-const posts = ref([]);
-const error = ref(null);
-const loading = ref(false);
 const params = ref({
   _sort: 'createdAt',
   _order: 'desc',
@@ -75,33 +73,21 @@ const params = ref({
   _page: 1,
   title_like: '',
 });
+
+const {
+  response,
+  data: posts,
+  error,
+  loading,
+} = useAxios('/posts', { params });
+
 /** PAGINATION */
-const totalPostCount = ref(0);
+const totalPostCount = computed(() => response.value.headers['x-total-count']);
 const pageCount = computed(() =>
   Math.ceil(totalPostCount.value / params.value._limit),
 );
 
-const fetchPosts = async () => {
-  try {
-    loading.value = true;
-    const { data, headers } = await getPosts(params.value);
-    posts.value = data;
-    // ({ data: posts.value } = await getPosts()); // equivalent with destructuring
-    totalPostCount.value = headers['x-total-count'];
-  } catch (err) {
-    console.log(err);
-    error.value = err;
-  } finally {
-    loading.value = false;
-  }
-};
-
-fetchPosts();
-
-watchEffect(fetchPosts);
-
 const handleGoToDetailPage = id => {
-  // router.push(`/posts/${id}`);
   router.push({
     name: 'PostDetail',
     params: { id },

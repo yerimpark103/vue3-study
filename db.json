@@ -37,12 +37,6 @@
       "createdAt": "2020-07-02"
     },
     {
-      "id": 8,
-      "title": "제목8",
-      "contents": "내용8",
-      "createdAt": "2020-08-02"
-    },
-    {
       "title": "123",
       "contents": "123123",
       "createdAt": 1684355073458,
@@ -149,6 +143,12 @@
       "contents": "werwer",
       "createdAt": 1685366813065,
       "id": 28
+    },
+    {
+      "title": "1111",
+      "contents": "2222",
+      "createdAt": 1685369177998,
+      "id": 29
     }
   ]
 }
