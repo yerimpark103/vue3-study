@@ -8,23 +8,30 @@
     />
 
     <hr class="my-4" />
-    <AppGrid :items="posts">
-      <template v-slot="{ item }">
-        <PostItem
-          :title="item.title"
-          :contents="item.contents"
-          :createdAt="item.createdAt"
-          @click="handleGoToDetailPage(item.id)"
-          @modal="handleOpenModal(item)"
-        ></PostItem>
-      </template>
-    </AppGrid>
 
-    <AppPagination
-      :current-page="params._page"
-      :page-count="pageCount"
-      @updatePage="page => (params._page = page)"
-    />
+    <AppLoading v-if="loading" />
+
+    <AppError v-else-if="error" :message="error.message" />
+
+    <template v-else>
+      <AppGrid :items="posts">
+        <template v-slot="{ item }">
+          <PostItem
+            :title="item.title"
+            :contents="item.contents"
+            :createdAt="item.createdAt"
+            @click="handleGoToDetailPage(item.id)"
+            @modal="handleOpenModal(item)"
+          ></PostItem>
+        </template>
+      </AppGrid>
+
+      <AppPagination
+        :current-page="params._page"
+        :page-count="pageCount"
+        @updatePage="page => (params._page = page)"
+      />
+    </template>
 
     <Teleport to="#modal">
       <PostModal
@@ -49,14 +56,18 @@ import PostItem from '@/components/posts/PostItem.vue';
 import PostDetailView from '@/views/posts/PostDetailView.vue';
 import PostFilter from '@/views/posts/PostFilter.vue';
 import PostModal from '@/components/posts/PostModal.vue';
+import AppLoading from '@/components/app/AppLoading.vue';
+import AppError from '@/components/app/AppError.vue';
 import { getPosts } from '@/api/posts';
 import { ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import { computed } from '@vue/reactivity';
 
 const router = useRouter();
-const posts = ref([]);
 
+const posts = ref([]);
+const error = ref(null);
+const loading = ref(false);
 const params = ref({
   _sort: 'createdAt',
   _order: 'desc',
@@ -72,12 +83,16 @@ const pageCount = computed(() =>
 
 const fetchPosts = async () => {
   try {
+    loading.value = true;
     const { data, headers } = await getPosts(params.value);
     posts.value = data;
     // ({ data: posts.value } = await getPosts()); // equivalent with destructuring
     totalPostCount.value = headers['x-total-count'];
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    console.log(err);
+    error.value = err;
+  } finally {
+    loading.value = false;
   }
 };
 

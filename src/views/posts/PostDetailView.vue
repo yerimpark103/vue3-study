@@ -1,9 +1,15 @@
 <template>
-  <div>
+  <AppLoading v-if="loading" />
+
+  <AppError v-else-if="error" :message="error.message" />
+
+  <div v-else>
     <h2>{{ post.title }}</h2>
     <p>{{ post.contents }}</p>
     <p class="text-muted">{{ post.createdAt }}</p>
     <hr class="my-4" />
+    <AppError v-if="deleteError" :message="deleteError.message" />
+
     <div class="row g-2">
       <div class="col-auto">
         <button class="btn btn-outline-dark">이전 글</button>
@@ -23,8 +29,20 @@
         </button>
       </div>
       <div class="col-auto">
-        <button class="btn btn-outline-danger" @click="handleClickDeletePost">
-          삭제
+        <button
+          class="btn btn-outline-danger"
+          :disabled="deleteLoading"
+          @click="handleClickDeletePost"
+        >
+          <template v-if="deleteLoading">
+            <span
+              class="spinner-grow spinner-grow-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span class="visually-hidden">Loading...</span>
+          </template>
+          <template v-else>삭제</template>
         </button>
       </div>
     </div>
@@ -35,6 +53,10 @@
 import { useRouter } from 'vue-router';
 import { getPostById, deletePost } from '@/api/posts';
 import { ref } from 'vue';
+
+import { useAlert } from '@/composables/alert.js';
+
+const { vAlert, vSuccess } = useAlert();
 
 const props = defineProps({
   id: [String, Number],
@@ -51,9 +73,12 @@ const post = ref({
   createdAt: null,
 });
 // let post = reactive({});
+const error = ref(null);
+const loading = ref(false);
 
 const fetchPost = async () => {
   try {
+    loading.value = true;
     const { data } = await getPostById(props.id);
     setPost(data);
     /** ref 로 선언하면 반응형 객체할당이 됨
@@ -68,8 +93,11 @@ const fetchPost = async () => {
      */
     // post.title = data.title;
     // post.contents = data.contents;
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    console.log(err);
+    error.value = err;
+  } finally {
+    loading.value = false;
   }
 };
 
@@ -94,14 +122,21 @@ const handleGoToEditPage = () => {
   });
 };
 
+const deleteError = ref(null);
+const deleteLoading = ref(false);
+
 const handleClickDeletePost = async () => {
   try {
     if (confirm('Are you sure?') === false) return;
 
+    deleteLoading.value = true;
     await deletePost(props.id);
     router.push({ name: 'PostList' });
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    vAlert(err.message);
+    editError.value = err;
+  } finally {
+    deleteLoading.value = false;
   }
 };
 </script>
