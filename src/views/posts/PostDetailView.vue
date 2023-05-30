@@ -51,7 +51,7 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
+import { useRouter, onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router';
 import { getPostById, deletePost } from '@/api/posts';
 import { ref, toRef, toRefs, computed } from 'vue';
 
@@ -109,6 +109,21 @@ const {
 const handleClickDeletePost = async () => {
   if (confirm('Are you sure?') === false) return;
   execute();
+};
+
+onBeforeRouteUpdate(() => {
+  console.log('onBeforeRouteUpdate');
+});
+onBeforeRouteLeave(() => {
+  console.log('onBeforeRouteLeave');
+});
+</script>
+
+<script>
+export default {
+  beforeRouteEnter() {
+    console.log('beforeRouteEnter');
+  },
 };
 </script>
 

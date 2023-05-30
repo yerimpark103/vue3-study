@@ -6,7 +6,7 @@
       style="background-color: #e3f2fd"
     >
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">My Page</a>
+        <RouterLink class="navbar-brand" to="/"> CP </RouterLink>
         <button
           class="navbar-toggler"
           type="button"
@@ -38,6 +38,11 @@
             <li class="nav-item">
               <RouterLink class="nav-link" active-class="active" to="/nested">
                 Nested
+              </RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink class="nav-link" active-class="active" to="/my">
+                MyPage
               </RouterLink>
             </li>
           </ul>
