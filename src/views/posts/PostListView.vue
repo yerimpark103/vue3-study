@@ -22,6 +22,7 @@
             :createdAt="item.createdAt"
             @click="handleGoToDetailPage(item.id)"
             @modal="handleOpenModal(item)"
+            @preview="selectPreview(item.id)"
           ></PostItem>
         </template>
       </AppGrid>
@@ -42,10 +43,10 @@
       />
     </Teleport>
 
-    <template v-if="posts && posts.length > 0">
+    <template v-if="previewId">
       <hr class="my-4" />
       <AppCard>
-        <PostDetailView :id="posts[0].id"></PostDetailView>
+        <PostDetailView :id="previewId"></PostDetailView>
       </AppCard>
     </template>
   </div>
@@ -65,6 +66,9 @@ import { computed } from '@vue/reactivity';
 import { useAxios } from '@/hooks/useAxios';
 
 const router = useRouter();
+
+const previewId = ref(null);
+const selectPreview = id => (previewId.value = id);
 
 const params = ref({
   _sort: 'createdAt',

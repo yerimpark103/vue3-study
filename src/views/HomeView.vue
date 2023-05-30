@@ -7,6 +7,7 @@
       <AppCard>{{ item }}</AppCard>
     </AppGrid>
     <hr class="my-4" />
+    {{ position }}
     <!-- <h2>{{ $person.name }}</h2> -->
     <!-- <button class="btn btn-primary" @click="person.say">click person</button> -->
   </div>
@@ -22,12 +23,16 @@ export default {
 </script>
 
 <script setup>
-import { inject, ref } from 'vue';
+import { ref, reactive, toRefs } from 'vue';
 
 const items = ref(['사과', '딸기', '포도', '바나나']);
 
-// const person = inject('person');
-// console.log('injected person name', person.name);
+const position = reactive({
+  x: 100,
+  y: 1000,
+});
+
+const { x, y } = toRefs(position);
 </script>
 
 <style lang="scss" scoped></style>

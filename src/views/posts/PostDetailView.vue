@@ -5,6 +5,7 @@
 
   <div v-else>
     <h2>{{ post.title }}</h2>
+    <p>id : {{ props.id }}, isOdd: {{ isOdd }}</p>
     <p>{{ post.contents }}</p>
     <p class="text-muted">{{ post.createdAt }}</p>
     <hr class="my-4" />
@@ -52,10 +53,11 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { getPostById, deletePost } from '@/api/posts';
-import { ref } from 'vue';
+import { ref, toRef, toRefs, computed } from 'vue';
 
 import { useAxios } from '@/hooks/useAxios';
 import { useAlert } from '@/composables/alert.js';
+import { useNumber } from '@/composables/number.js';
 
 const { vAlert, vSuccess } = useAlert();
 
@@ -65,7 +67,12 @@ const props = defineProps({
 
 const router = useRouter();
 
-const { data: post, error, loading } = useAxios(`/posts/${props.id}`);
+const { id: idRef } = toRefs(props);
+// const idRef = toRef(props, 'id');
+const { isOdd } = useNumber(idRef);
+
+const url = computed(() => `/posts/${props.id}`);
+const { data: post, error, loading } = useAxios(url);
 
 const handleGoToListPage = () => {
   router.push({
